@@ -4,10 +4,12 @@ fn main() {
     let mut my_vec = vec![1, 2, 3, 3, 4, 5, 1, 3, 4, 10];
     let my_vec_len = my_vec.len();
 
+    // Mean
     let sum: i32 = my_vec.iter().sum();
     let mean: f32 = sum as f32 / my_vec_len as f32;
     println!("Mean: {}", mean);
 
+    // Median
     my_vec.sort();
 
     let median: f32 = match my_vec_len {
@@ -16,6 +18,7 @@ fn main() {
     };
     println!("Median: {}", median);
 
+    // Mod
     let mut map = HashMap::new();
     for i in my_vec {
         let cnt = map.entry(i).or_insert(0);
