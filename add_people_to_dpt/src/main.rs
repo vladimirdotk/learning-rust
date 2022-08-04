@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use std::collections::HashMap;
 
 use std::fmt;
@@ -68,12 +69,14 @@ fn people_in_dpt(dpt: &str, storage: &mut HashMap<String, Vec<String>>) -> Vec<S
 }
 
 fn all_people_sorted(storage: &mut HashMap<String, Vec<String>>) -> Vec<String> {
-    let mut people = storage.iter().fold(
-        Vec::<String>::with_capacity(storage.len()),
-        |acc: Vec<String>, (_, value)| [acc, value.to_vec()].concat(),
-    );
-
-    people.sort();
-
-    people
+    Itertools::sorted(
+        storage
+            .iter()
+            .fold(
+                Vec::<String>::with_capacity(storage.len()),
+                |acc: Vec<String>, (_, value)| [acc, value.to_vec()].concat(),
+            )
+            .into_iter(),
+    )
+    .collect::<Vec<String>>()
 }
