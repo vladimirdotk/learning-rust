@@ -30,7 +30,7 @@ fn main() {
     println!("{:?}", people_in_dpt("Engineers", &mut m));
 
     // Get all people sorted.
-    println!("{:?}", all_people_sorted(&mut m));
+    println!("{:?}", all_people_sorted(&m));
 }
 
 fn add_record(
@@ -68,15 +68,10 @@ fn people_in_dpt(dpt: &str, storage: &mut HashMap<String, Vec<String>>) -> Vec<S
     }
 }
 
-fn all_people_sorted(storage: &mut HashMap<String, Vec<String>>) -> Vec<String> {
-    Itertools::sorted(
-        storage
-            .iter()
-            .fold(
-                Vec::<String>::with_capacity(storage.len()),
-                |acc: Vec<String>, (_, value)| [acc, value.to_vec()].concat(),
-            )
-            .into_iter(),
-    )
-    .collect::<Vec<String>>()
+fn all_people_sorted(storage: &HashMap<String, Vec<String>>) -> Vec<String> {
+    storage
+        .iter()
+        .flat_map(|(_, value)| value.iter().cloned())
+        .sorted()
+        .collect()
 }
