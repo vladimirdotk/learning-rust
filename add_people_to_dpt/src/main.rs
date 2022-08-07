@@ -1,14 +1,6 @@
 use itertools::Itertools;
 use std::collections::HashMap;
-
-use std::fmt;
-
-struct RecordParseError;
-impl fmt::Display for RecordParseError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Failed to parse record")
-    }
-}
+use std::error::Error;
 
 fn main() {
     let mut m = HashMap::new();
@@ -36,21 +28,21 @@ fn main() {
 fn add_record(
     record: &str,
     storage: &mut HashMap<String, Vec<String>>,
-) -> Result<(), RecordParseError> {
+) -> Result<(), Box<dyn Error>> {
     let mut it = record.split_whitespace();
 
     it.next();
 
     let name = match it.next() {
         Some(value) => value,
-        None => return Err(RecordParseError),
+        None => Err("fail to parse name")?,
     };
 
     it.next();
 
     let dept = match it.next() {
         Some(value) => value,
-        None => return Err(RecordParseError),
+        None => Err("fail to parse dept")?,
     };
 
     storage
