@@ -2,28 +2,7 @@ use itertools::Itertools;
 use std::collections::HashMap;
 use std::error::Error;
 
-fn main() {
-    let mut m = HashMap::new();
-
-    for record in [
-        "Add Ann to Engineers",
-        "Add Peter to Engineers",
-        "Add Harry to Cleaners",
-    ] {
-        match add_record(record, &mut m) {
-            Err(e) => println!("Error adding record to storage: {}", e),
-            _ => println!("Success!"),
-        }
-    }
-
-    println!("{:?}", m);
-
-    // Get people form Eng. dpt.
-    println!("{:?}", people_in_dpt("Engineers", &mut m));
-
-    // Get all people sorted.
-    println!("{:?}", all_people_sorted(&m));
-}
+fn main() {}
 
 fn add_record(
     record: &str,
@@ -66,4 +45,53 @@ fn all_people_sorted(storage: &HashMap<String, Vec<String>>) -> Vec<String> {
         .flat_map(|(_, value)| value.iter().cloned())
         .sorted()
         .collect()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn success_case() {
+        let mut m = HashMap::new();
+
+        for record in [
+            "Add Ann to Engineers",
+            "Add Peter to Engineers",
+            "Add Harry to Cleaners",
+        ] {
+            match add_record(record, &mut m) {
+                Err(e) => println!("Error adding record to storage: {}", e),
+                _ => println!("Success!"),
+            }
+        }
+
+        // Create hash map with depts and people
+        assert_eq!(
+            HashMap::from([
+                (
+                    String::from("Engineers"),
+                    vec![String::from("Ann"), String::from("Peter")]
+                ),
+                (String::from("Cleaners"), vec![String::from("Harry")]),
+            ]),
+            m
+        );
+
+        // Get people form Eng. dpt.
+        assert_eq!(
+            vec![String::from("Ann"), String::from("Peter")],
+            people_in_dpt("Engineers", &mut m),
+        );
+
+        // Get all people sorted
+        assert_eq!(
+            vec![
+                String::from("Ann"),
+                String::from("Harry"),
+                String::from("Peter")
+            ],
+            all_people_sorted(&m)
+        )
+    }
 }
