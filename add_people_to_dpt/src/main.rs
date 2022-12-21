@@ -42,7 +42,11 @@ fn people_in_dpt(dpt: &str, storage: &mut HashMap<String, Vec<String>>) -> Vec<S
 fn all_people_sorted(storage: &HashMap<String, Vec<String>>) -> Vec<String> {
     storage
         .iter()
-        .flat_map(|(_, value)| value.iter().cloned())
+        .flat_map(|(_, value)| {
+            value
+                .iter()
+                .cloned()
+        })
         .sorted()
         .collect()
 }
